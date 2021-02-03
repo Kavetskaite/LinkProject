@@ -12,8 +12,10 @@ module.exports =(req, res, next) => {
         if(!token) {
             return res.status(401).json({message: "None authorization!"});
         }
-
         const decoded = jwt.verify(token, config.get('jwtSecret'));
+        if(!decoded) {
+            return res.status(401).json({ message: 'No authorization' });
+        }
         req.user = decoded;
         next();
     } catch (e) {
